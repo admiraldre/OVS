@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "797689280937",
+    "project_id": "logindatabase-solution1",
+    "storage_bucket": "logindatabase-solution1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:797689280937:android:d3982626d52fb153dd6cb8",
+        "android_client_info": {
+          "package_name": "com.example.votingsystem"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "797689280937-9j166n2ramats77s358kt39glroih5hv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAONJsWRHbxBhppfNpZ9ykK3huFkvKR3xc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "797689280937-9j166n2ramats77s358kt39glroih5hv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
