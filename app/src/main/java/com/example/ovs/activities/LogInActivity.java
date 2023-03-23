@@ -25,8 +25,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import org.w3c.dom.Text;
+
 public class LogInActivity extends AppCompatActivity implements View.OnClickListener{
-    private TextView register, forgotPassword;
+    private TextView register, forgotPassword,admin;
     private EditText user_email, user_password;
     private Button logIn;
 
@@ -54,6 +56,9 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         forgotPassword = (TextView) findViewById(R.id.forget_password);
         forgotPassword.setOnClickListener(this);
 
+        admin = (TextView) findViewById(R.id.admin_login);
+        admin.setOnClickListener(this);
+
     }
 
     @Override
@@ -69,6 +74,10 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
 
             case R.id.forget_password:
                 startActivity(new Intent(this, ForgetPasswordActivity.class));
+                break;
+
+            case R.id.admin_login:
+                startActivity(new Intent(this, AdminHome.class));
                 break;
         }
     }
