@@ -24,12 +24,11 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class AdminHome extends AppCompatActivity implements View.OnClickListener {
 
-    private TextView userlogin, adminSignUp;
+    private TextView userlogin;
     private EditText admin_user, admin_password;
     private Button adminLogin;
+    private FirebaseAuth mAuth;
 
-   // private FirebaseAuth mAuth;
-   // private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +37,6 @@ public class AdminHome extends AppCompatActivity implements View.OnClickListener
 
         userlogin = (TextView) findViewById(R.id.login);
         userlogin.setOnClickListener(this);
-
-        adminSignUp = (TextView) findViewById(R.id.adminsignup);
-        adminSignUp.setOnClickListener(this);
 
         adminLogin = (Button) findViewById(R.id.login_btn);
         adminLogin.setOnClickListener(this);
@@ -64,12 +60,25 @@ public class AdminHome extends AppCompatActivity implements View.OnClickListener
                 break;
 
             case R.id.login_btn: //MAYBE MAKE AN ADMIN LOGIN FUNCTION???
-                startActivity(new Intent(this,AdminMainActivity.class));
+                adminLogin();
                 break;
-
-            case R.id.adminsignup:
-                startActivity(new Intent(this,AdminSignUp.class));
-
         }
+    }
+
+    private void adminLogin() {
+        String username = admin_user.getText().toString().trim();
+        String adminpass = admin_password.getText().toString().trim();
+
+        if(username.isEmpty()){
+            admin_user.setError("Admin Username is required!");
+            admin_user.requestFocus();
+            return;
+        }
+        if(adminpass.isEmpty()){
+            admin_password.setError("Admin Password is required!");
+            admin_password.requestFocus();
+            return;
+        }
+        startActivity(new Intent(AdminHome.this,AdminDashboard.class));
     }
 }

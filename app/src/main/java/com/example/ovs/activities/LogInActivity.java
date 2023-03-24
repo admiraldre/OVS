@@ -28,19 +28,18 @@ import com.google.firebase.storage.StorageReference;
 import org.w3c.dom.Text;
 
 public class LogInActivity extends AppCompatActivity implements View.OnClickListener{
-    private TextView register, forgotPassword,admin;
+    private TextView forgotPassword;
     private EditText user_email, user_password;
-    private Button logIn;
+    private Button logIn, register, admin;
 
     private FirebaseAuth mAuth;
-    private ProgressBar progressBar;
 
     @Override
     protected void  onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
 
-        register = (TextView) findViewById(R.id.register);
+        register = (Button) findViewById(R.id.register);
         register.setOnClickListener(this);
 
         logIn = (Button) findViewById(R.id.login_btn);
@@ -49,14 +48,12 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         user_email = (EditText) findViewById(R.id.user_email);
         user_password = (EditText) findViewById(R.id.user_password);
 
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-
         mAuth = FirebaseAuth.getInstance();
 
         forgotPassword = (TextView) findViewById(R.id.forget_password);
         forgotPassword.setOnClickListener(this);
 
-        admin = (TextView) findViewById(R.id.admin_login);
+        admin = (Button) findViewById(R.id.admin_login);
         admin.setOnClickListener(this);
 
     }
@@ -106,7 +103,6 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
             user_password.requestFocus();
             return;
         }
-        progressBar.setVisibility(View.VISIBLE);
 
         mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override

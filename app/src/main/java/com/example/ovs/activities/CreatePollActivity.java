@@ -40,6 +40,34 @@ public class CreatePollActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.createpoll:
+                sendPoll();
+                break;
+        }
+    }
 
+    private void sendPoll() {
+        String pollName = pollname.getText().toString().trim();
+        String optionOne = option1.getText().toString().trim();
+        String optionTwo = option2.getText().toString().trim();
+        String optionThree = option3.getText().toString().trim();
+        String optionFour = option4.getText().toString().trim();
+
+        if(pollName.isEmpty()){
+            pollname.setError("Poll Name is required!");
+            pollname.requestFocus();
+            return;
+        }
+        if(optionOne.isEmpty()){
+            option1.setError("Minimum of two options are required!");
+            option1.requestFocus();
+            return;
+        }
+        if(optionTwo.isEmpty()){
+            option2.setError("Minimum of two options are required!");
+            option2.requestFocus();
+            return;
+        }
     }
 }

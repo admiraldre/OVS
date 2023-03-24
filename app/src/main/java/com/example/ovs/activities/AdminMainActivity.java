@@ -30,9 +30,11 @@ public class AdminMainActivity extends AppCompatActivity implements View.OnClick
         switch (v.getId()){
             case R.id.createpoll:
                 startActivity(new Intent(AdminMainActivity.this, CreatePollActivity.class));
+                break;
 
-            case R.id.viewdash:
-                startActivity(new Intent(AdminMainActivity.this,AdminDashboard.class));
+           case R.id.viewdash:
+               startActivity(new Intent(AdminMainActivity.this,AdminMainActivity.class));
+               break;
         }
     }
 }

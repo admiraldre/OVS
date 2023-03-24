@@ -27,10 +27,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class SignUpActivity extends AppCompatActivity{
-    private TextView login;
     private EditText user_name, user_email, user_password;
-    private ProgressBar progressBar;
-    private Button signup;
+    private Button signup,login;
 
     private FirebaseAuth mAuth;
 
@@ -41,7 +39,7 @@ public class SignUpActivity extends AppCompatActivity{
 
         mAuth = FirebaseAuth.getInstance();
 
-        login = (TextView) findViewById(R.id.login);
+        login = (Button) findViewById(R.id.login);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,8 +58,6 @@ public class SignUpActivity extends AppCompatActivity{
         user_name = (EditText) findViewById(R.id.user_name);
         user_email = (EditText) findViewById(R.id.user_email);
         user_password = (EditText) findViewById(R.id.user_password);
-
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
     }
 
@@ -97,7 +93,6 @@ public class SignUpActivity extends AppCompatActivity{
             user_password.requestFocus();
             return;
         }
-        progressBar.setVisibility(View.VISIBLE);
         mAuth.createUserWithEmailAndPassword(email,password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -112,20 +107,16 @@ public class SignUpActivity extends AppCompatActivity{
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if(task.isSuccessful()){
                                                 Toast.makeText(SignUpActivity.this, "User has been registered successfully", Toast.LENGTH_LONG).show();
-                                                progressBar.setVisibility(View.GONE);
-
                                                 startActivity(new Intent(SignUpActivity.this, LogInActivity.class));
                                             }
                                             else {
                                                 Toast.makeText(SignUpActivity.this, "Failed to register. Try again!", Toast.LENGTH_LONG).show();
-                                                progressBar.setVisibility(View.GONE);
                                             }
                                         }
                                     });
                         }
                         else {
                             Toast.makeText(SignUpActivity.this, "Failed to register. Try again!", Toast.LENGTH_LONG).show();
-                            progressBar.setVisibility(View.GONE);
                         }
                     }
                 });
