@@ -11,7 +11,7 @@ import com.example.ovs.R;
 
 public class AdminMainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Button createPoll, viewDash;
+    private Button createPoll, viewDash, logout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +23,9 @@ public class AdminMainActivity extends AppCompatActivity implements View.OnClick
 
         viewDash = (Button) findViewById(R.id.viewdash);
         viewDash.setOnClickListener(this);
+
+        logout = (Button) findViewById(R.id.logout);
+        logout.setOnClickListener(this);
     }
 
     @Override
@@ -31,10 +34,12 @@ public class AdminMainActivity extends AppCompatActivity implements View.OnClick
             case R.id.createpoll:
                 startActivity(new Intent(AdminMainActivity.this, CreatePollActivity.class));
                 break;
-
-           case R.id.viewdash:
-               startActivity(new Intent(AdminMainActivity.this,AdminMainActivity.class));
-               break;
+            case R.id.viewdash:
+                startActivity(new Intent(AdminMainActivity.this, Dashboard.class));
+                break;
+            case R.id.logout:
+                startActivity(new Intent(AdminMainActivity.this,AdminHome.class));
+                break;
         }
     }
 }

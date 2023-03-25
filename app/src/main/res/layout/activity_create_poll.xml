@@ -57,7 +57,6 @@
                 android:layout_margin="8dp"
                 android:hint="Enter Option 4"/>
 
-
             <Button
                 android:id="@+id/createpoll"
                 android:layout_width="match_parent"
@@ -67,8 +66,18 @@
                 android:padding="8dp"
                 android:text="Create Poll"
                 android:textAllCaps="false" />
+            <Button
+                android:id="@+id/goback"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:backgroundTint="@color/black"
+                android:padding="8dp"
+                android:text="Home"
+                android:textAllCaps="false" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
 
 
 </RelativeLayout>

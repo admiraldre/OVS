@@ -20,7 +20,7 @@
             android:name=".activities.ViewPollActivity"
             android:exported="true" />
         <activity
-            android:name=".activities.AdminDashboard"
+            android:name=".activities.Dashboard"
             android:exported="true" />
         <activity
             android:name=".activities.CreatePollActivity"

@@ -30,6 +30,13 @@
         android:layout_centerInParent="true"
         android:text="View dashboard"
         android:id="@+id/viewdash"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/viewdash"
+        android:layout_centerInParent="true"
+        android:text="Log out"
+        android:id="@+id/logout"/>
 
 
 </RelativeLayout>

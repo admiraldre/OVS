@@ -47,7 +47,7 @@ public class AdminHome extends AppCompatActivity implements View.OnClickListener
         admin_password = (EditText) findViewById(R.id.admin_password);
         admin_password.setOnClickListener(this);
 
-       // progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        // progressBar = (ProgressBar) findViewById(R.id.progressBar);
         // mAuth = FirebaseAuth.getInstance();
 
     }
@@ -79,6 +79,6 @@ public class AdminHome extends AppCompatActivity implements View.OnClickListener
             admin_password.requestFocus();
             return;
         }
-        startActivity(new Intent(AdminHome.this,AdminDashboard.class));
+        startActivity(new Intent(AdminHome.this,AdminMainActivity.class));
     }
 }

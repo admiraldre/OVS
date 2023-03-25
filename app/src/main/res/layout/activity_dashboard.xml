@@ -6,31 +6,34 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="10dp"
-        android:layout_margin="10dp">
+        android:layout_height="100dp"
+        android:id="@+id/cardViewview">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:src="@drawable/codinglanguage"
-                android:scaleType="fitXY"/>
-            <androidx.recyclerview.widget.RecyclerView
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/pollsRv"
-                android:layout_marginTop="10dp"/>
+                android:text="CURRENT POLLS"
+                android:gravity="center"
+                android:id=""/>
 
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/"/>
         </LinearLayout>
 
-
-
     </androidx.cardview.widget.CardView>
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cardViewview">
+    </ListView>
+
 
 
 </RelativeLayout>
