@@ -6,9 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,86 +25,104 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-public class LogInActivity extends AppCompatActivity {
+import org.w3c.dom.Text;
 
-    private EditText userEmail, userPassword;
-    private Button loginBtn;
-    private TextView forgetPassword;
+public class LogInActivity extends AppCompatActivity implements View.OnClickListener{
+    private TextView forgotPassword;
+    private EditText user_email, user_password;
+    private Button logIn, register, admin;
+
     private FirebaseAuth mAuth;
 
-    private static final String PREFERENCES = "prefKey";
-    private static final String Name = "nameKey";
-    private static final String Email = "emailKey";
-    private static final String Password = "passwordKey";
-
-    SharedPreferences sharedPreferences;
-    StorageReference reference;
-    FirebaseFirestore firebaseFirestore;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void  onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
 
-        sharedPreferences = getApplicationContext().getSharedPreferences(PREFERENCES,MODE_PRIVATE);
-        reference = FirebaseStorage.getInstance().getReference();
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        findViewById(R.id.dont_have_acc).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(LogInActivity.this, SignUpActivity.class));
-            }
-        });
+        register = (Button) findViewById(R.id.register);
+        register.setOnClickListener(this);
 
-        userEmail = findViewById(R.id.user_email);
-        userPassword = findViewById(R.id.user_password);
-        loginBtn = findViewById(R.id.login_btn);
-        forgetPassword = findViewById(R.id.forget_password);
+        logIn = (Button) findViewById(R.id.login_btn);
+        logIn.setOnClickListener(this);
+
+        user_email = (EditText) findViewById(R.id.user_email);
+        user_password = (EditText) findViewById(R.id.user_password);
+
         mAuth = FirebaseAuth.getInstance();
 
-        loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String email = userEmail.getText().toString().trim();
-                String password = userPassword.getText().toString().trim();
+        forgotPassword = (TextView) findViewById(R.id.forget_password);
+        forgotPassword.setOnClickListener(this);
 
-
-                mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-
-                        if(task.isSuccessful()){
-                            verifyEmail();
-                        }
-                        else {
-                            Toast.makeText(LogInActivity.this, "User is not found.", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }
-        });
+        admin = (Button) findViewById(R.id.admin_login);
+        admin.setOnClickListener(this);
 
     }
 
-    private void verifyEmail() {
-        FirebaseUser user = mAuth.getCurrentUser();
-        if(user.isEmailVerified()){
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.register:
+                startActivity(new Intent(this, SignUpActivity.class));
+                break;
 
-            String name = sharedPreferences.getString(Name,null);
-            String password = sharedPreferences.getString(Password,null);
-            String email = sharedPreferences.getString(Email,null);
+            case R.id.login_btn:
+                userLogIn();
+                break;
 
-            // We first sent email verification
-            // Then, we store data in shared preference if user verifies the email
-            // then we login and upload data to Firestore
-            if(name !=null && password !=null && email !=null){
-                String uid = mAuth.getUid();
-                startActivity(new Intent(LogInActivity.this,HomeActivity.class));
-                finish();
+            case R.id.forget_password:
+                startActivity(new Intent(this, ForgetPasswordActivity.class));
+                break;
+
+            case R.id.admin_login:
+                startActivity(new Intent(this, AdminHome.class));
+                break;
+        }
+    }
+
+    private void userLogIn() {
+        String email = user_email.getText().toString().trim();
+        String password = user_password.getText().toString().trim();
+
+        if(email.isEmpty()){
+            user_email.setError("Email is required!");
+            user_email.requestFocus();
+            return;
+        }
+        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            user_email.setError("Please enter a valid email!");
+            user_email.requestFocus();
+            return;
+        }
+        if(password.isEmpty()){
+            user_password.setError("Password is required!");
+            user_password.requestFocus();
+            return;
+        }
+        if(password.length() < 6){
+            user_password.setError("Password must be a minimum of 6 characters!");
+            user_password.requestFocus();
+            return;
+        }
+
+        mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()){
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                    if(user.isEmailVerified()) {
+                        //redirect to user profile
+                        startActivity(new Intent(LogInActivity.this, HomeActivity.class));
+                    }
+                    else {
+                        user.sendEmailVerification();
+                        Toast.makeText(LogInActivity.this, "Check your email to verify your account", Toast.LENGTH_LONG).show();
+                    }
+                }
+                else {
+                    Toast.makeText(LogInActivity.this, "Failed to log in. Please check your log in information.", Toast.LENGTH_LONG).show();
+                }
             }
-        }
-        else{
-            mAuth.signOut();
-            Toast.makeText(LogInActivity.this, "Please verify your email.", Toast.LENGTH_SHORT).show();
-        }
+        });
     }
 }

@@ -11,14 +11,32 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/polls_drawable"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.OVS"
         tools:targetApi="31">
         <activity
-            android:name=".HomeActivity"
-            android:exported="false" />
+            android:name=".activities.ViewPollActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activities.AdminDashboard"
+            android:exported="true" />
+        <activity
+            android:name=".activities.CreatePollActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activities.AdminMainActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activities.AdminHome"
+            android:exported="true" />
+        <activity
+            android:name=".activities.ForgetPasswordActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activities.HomeActivity"
+            android:exported="true" />
         <activity
             android:name=".activities.SignUpActivity"
             android:exported="true" />
