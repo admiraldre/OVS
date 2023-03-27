@@ -1,5 +1,6 @@
 package com.example.ovs.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -19,12 +20,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.checkerframework.common.value.qual.StringVal;
+
 public class ViewPollActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button option1,option2,option3,option4,refresh,goback;
-    private TextView result1,result2,result3,result4;
+    private TextView result1,result2,result3,result4,pollname;
     FirebaseUser user;
     FirebaseAuth auth;
+    String childKey, key;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +65,43 @@ public class ViewPollActivity extends AppCompatActivity implements View.OnClickL
         result4 = (TextView) findViewById(R.id.result4);
         result4.setOnClickListener(this);
 
+        pollname= findViewById(R.id.pollname);
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra("key")) {
+            key = intent.getStringExtra("key");
+            pollname.setText(key);
+
+            DatabaseReference pollRef = FirebaseDatabase.getInstance().getReference().child("Polls").child(key).child("votes");
+
+            // Add a listener to retrieve the value of the child node
+            pollRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    int childIndex = 0;
+                    for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                        childKey = childSnapshot.getKey();
+                        switch(childIndex) {
+                            case 0:
+                                option1.setText(childKey);
+                                break;
+                            case 1:
+                                option2.setText(childKey);
+                                break;
+                            case 2:
+                                option3.setText(childKey);
+                                break;
+                            case 3:
+                                option4.setText(childKey);
+                                break;
+                        }
+                        childIndex++;
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
+        }
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
 
@@ -68,21 +109,22 @@ public class ViewPollActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View view) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference();
         String email = user.getEmail();
 
-   /*     switch (view.getId()){
+        switch (view.getId()){
+
             case R.id.option1_vote:
-                myRef.child("Polls").child(pollName).child("voters").orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener(){
+                myRef.child("Polls").child(key).child("voters").orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener(){
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
                             Toast.makeText(ViewPollActivity.this, "Already voted", Toast.LENGTH_SHORT).show();
                         } else {
                             Voter Voter = new Voter(email);
-                            myRef.child("Polls").child(pollName).child("voters").push().setValue(Voter);
-                            myRef.child("Polls").child(pollName).child("votes").child(optionONE).push().setValue(1);
+                            myRef.child("Polls").child(key).child("voters").push().setValue(Voter);
+                            myRef.child("Polls").child(key).child("votes").child(option1.getText().toString()).push().setValue(1);
                             Toast.makeText(ViewPollActivity.this, "Vote counted", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -91,15 +133,15 @@ public class ViewPollActivity extends AppCompatActivity implements View.OnClickL
                 });
                 break;
             case R.id.option2_vote:
-                myRef.child("Polls").child(pollName).child("voters").orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener(){
+                myRef.child("Polls").child(key).child("voters").orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener(){
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
                             Toast.makeText(ViewPollActivity.this, "Already voted", Toast.LENGTH_SHORT).show();
                         } else {
                             Voter Voter = new Voter(email);
-                            myRef.child("Polls").child(pollName).child("voters").push().setValue(Voter);
-                            myRef.child("Polls").child(pollName).child("votes").child(optionTWO).push().setValue(1);
+                            myRef.child("Polls").child(key).child("voters").push().setValue(Voter);
+                            myRef.child("Polls").child(key).child("votes").child(option2.getText().toString()).push().setValue(1);
                             Toast.makeText(ViewPollActivity.this, "Vote counted", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -108,15 +150,32 @@ public class ViewPollActivity extends AppCompatActivity implements View.OnClickL
                 });
                 break;
             case R.id.option3_vote:
-                myRef.child("Polls").child(pollName).child("voters").orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener(){
+                myRef.child("Polls").child(key).child("voters").orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener(){
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
                             Toast.makeText(ViewPollActivity.this, "Already voted", Toast.LENGTH_SHORT).show();
                         } else {
                             Voter Voter = new Voter(email);
-                            myRef.child("Polls").child(pollName).child("voters").push().setValue(Voter);
-                            myRef.child("Polls").child(pollName).child("votes").child(optionTHREE).push().setValue(1);
+                            myRef.child("Polls").child(key).child("voters").push().setValue(Voter);
+                            myRef.child("Polls").child(key).child("votes").child(option3.getText().toString()).push().setValue(1);
+                            Toast.makeText(ViewPollActivity.this, "Vote counted", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {}
+                });
+                break;
+            case R.id.option4_vote:
+                myRef.child("Polls").child(key).child("voters").orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener(){
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            Toast.makeText(ViewPollActivity.this, "Already voted", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Voter Voter = new Voter(email);
+                            myRef.child("Polls").child(key).child("voters").push().setValue(Voter);
+                            myRef.child("Polls").child(key).child("votes").child(option4.getText().toString()).push().setValue(1);
                             Toast.makeText(ViewPollActivity.this, "Vote counted", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -125,73 +184,62 @@ public class ViewPollActivity extends AppCompatActivity implements View.OnClickL
                 });
                 break;
 
-            case R.id.option4_vote:
-                myRef.child("Polls").child(pollName).child("voters").orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener(){
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            Toast.makeText(ViewPollActivity.this, "Already voted", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Voter Voter = new Voter(email);
-                            myRef.child("Polls").child(pollName).child("voters").push().setValue(Voter);
-                            myRef.child("Polls").child(pollName).child("votes").child(optionFOUR).push().setValue(1);
-                            Toast.makeText(ViewPollActivity.this, "Vote counted", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {}
-                });
-                break;
+
 
             case R.id.refresh:
-                myRef.child("Polls").child(pollName).child(optionONE).addValueEventListener(new ValueEventListener(){
+                DatabaseReference optionRef = myRef.child("Polls").child(key).child("votes").child(option1.getText().toString());
+                optionRef.addListenerForSingleValueEvent(new ValueEventListener(){
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
                             long count = dataSnapshot.getChildrenCount();
-                            result1.setText(optionONE+" has "+String.valueOf(count)+" votes");
+                            result1.setText(option1.getText().toString()+" has "+ String.valueOf(count)+" votes");
                         }
                     }
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {}
+                    public void onCancelled(@NonNull DatabaseError databaseError) {}
                 });
-                myRef.child("Polls").child(pollName).child(optionTWO).addValueEventListener(new ValueEventListener(){
+                DatabaseReference optionRef2 = myRef.child("Polls").child(key).child("votes").child(option2.getText().toString());
+                optionRef2.addListenerForSingleValueEvent(new ValueEventListener(){
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
                             long count = dataSnapshot.getChildrenCount();
-                            result2.setText(optionTWO+" has "+String.valueOf(count)+" votes");
+                            result2.setText(option2.getText().toString()+" has "+ String.valueOf(count)+" votes");
                         }
                     }
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {}
+                    public void onCancelled(@NonNull DatabaseError databaseError) {}
                 });
-                myRef.child("Polls").child(pollName).child(optionTHREE).addValueEventListener(new ValueEventListener(){
+                DatabaseReference optionRef3 = myRef.child("Polls").child(key).child("votes").child(option3.getText().toString());
+                optionRef3.addListenerForSingleValueEvent(new ValueEventListener(){
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
                             long count = dataSnapshot.getChildrenCount();
-                            result3.setText(optionTHREE+" has "+String.valueOf(count)+" votes");
+                            result3.setText(option3.getText().toString()+" has "+ String.valueOf(count)+" votes");
                         }
                     }
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {}
+                    public void onCancelled(@NonNull DatabaseError databaseError) {}
                 });
-                myRef.child("Polls").child(pollName).child(optionFOUR).addValueEventListener(new ValueEventListener(){
+                DatabaseReference optionRef4 = myRef.child("Polls").child(key).child("votes").child(option4.getText().toString());
+                optionRef4.addListenerForSingleValueEvent(new ValueEventListener(){
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
                             long count = dataSnapshot.getChildrenCount();
-                            result4.setText(optionFOUR+" has "+String.valueOf(count)+" votes");
+                            result4.setText(option4.getText().toString()+" has "+ String.valueOf(count)+" votes");
                         }
                     }
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {}
+                    public void onCancelled(@NonNull DatabaseError databaseError) {}
                 });
+                break;
+
             case R.id.goback:
                 onBackPressed();
                 break;
         }
-*/
     }
 }

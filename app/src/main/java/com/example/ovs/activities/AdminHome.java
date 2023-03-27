@@ -59,7 +59,7 @@ public class AdminHome extends AppCompatActivity implements View.OnClickListener
                 startActivity(new Intent(this,LogInActivity.class));
                 break;
 
-            case R.id.login_btn: //MAYBE MAKE AN ADMIN LOGIN FUNCTION???
+            case R.id.login_btn:
                 adminLogin();
                 break;
         }

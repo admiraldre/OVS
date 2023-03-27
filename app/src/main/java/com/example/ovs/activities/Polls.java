@@ -4,7 +4,6 @@ public class Polls {
     private String pollName;
 
     public Polls(){
-
     }
     public Polls(String pollName) {
         this.pollName = pollName;
@@ -13,8 +12,7 @@ public class Polls {
     public String getPollName() {
         return pollName;
     }
-
-    public void setPollName(String pollName) {
-        this.pollName = pollName;
+   @Override public String toString(){
+        return pollName;
     }
 }

@@ -3,9 +3,6 @@ package com.example.ovs.activities;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.ovs.R;
 import com.google.firebase.database.ChildEventListener;
@@ -21,50 +19,59 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
+import java.util.List;
 
-public class Dashboard extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class Dashboard extends AppCompatActivity implements View.OnClickListener{
     ListView listView;
     private Button goHome;
     FirebaseDatabase database;
     DatabaseReference ref;
-    ArrayList<String> arrayList;
+    private List<Polls> pollsList = new ArrayList<Polls>();
     ArrayAdapter<String> adapter;
-    Polls polls;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        polls = new Polls();
+        ArrayList<String> arrayList = new ArrayList<>();
+        adapter = new ArrayAdapter<String>(Dashboard.this, android.R.layout.simple_list_item_1, arrayList);
+
         listView = (ListView) findViewById(R.id.listView);
-        listView.setOnItemClickListener(this);
-        arrayList = new ArrayList<>();
-        adapter = new ArrayAdapter<String>(this,R.layout.user_info,R.id.userInfo,arrayList);
-
-        goHome = (Button) findViewById(R.id.goHome);
-        goHome.setOnClickListener(this);
-
-        database = FirebaseDatabase.getInstance();
-        ref = database.getReference("Polls");
-        ref.addValueEventListener(new ValueEventListener() {
+        listView.setAdapter(adapter);
+        ref = FirebaseDatabase.getInstance().getReference().child("Polls");
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot ds : snapshot.getChildren()){
-                    polls = ds.getValue(Polls.class);
-                    arrayList.add(polls.getPollName().toString());
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                    String key = dataSnapshot1.getKey();
+                    //Polls polls = dataSnapshot1.getValue(Polls.class);
+                    arrayList.add(key);
                 }
-                listView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //startActivity(new Intent(Dashboard.this, ViewPollActivity.class));
+                String selectedKey = (String) adapterView.getItemAtPosition(i);
+                Intent intent = new Intent(Dashboard.this, ViewPollActivity.class);
+                intent.putExtra("key", selectedKey);
+                startActivity(intent);
+
 
             }
         });
 
+        goHome = (Button) findViewById(R.id.goHome);
+        goHome.setOnClickListener(this);
 
     }
 
@@ -75,11 +82,5 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 startActivity(new Intent(Dashboard.this,LogInActivity.class));
                 break;
         }
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-
     }
 }
