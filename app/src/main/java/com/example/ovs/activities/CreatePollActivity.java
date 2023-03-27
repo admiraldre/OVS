@@ -96,6 +96,7 @@ public class CreatePollActivity extends AppCompatActivity implements View.OnClic
                             myRef.child("Polls").child(pollName).child("votes").child(optionFour).setValue(0);
                             myRef.child("Polls").child(pollName).child("voters");
                             Toast.makeText(CreatePollActivity.this, "Poll created", Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(CreatePollActivity.this,Dashboard.class));
                         }
                     }
 

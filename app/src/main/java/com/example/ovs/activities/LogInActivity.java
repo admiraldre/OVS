@@ -112,7 +112,7 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
 
                     if(user.isEmailVerified()) {
                         //redirect to user profile
-                        startActivity(new Intent(LogInActivity.this, ViewPollActivity.class));
+                        startActivity(new Intent(LogInActivity.this, Dashboard.class));
                     }
                     else {
                         user.sendEmailVerification();

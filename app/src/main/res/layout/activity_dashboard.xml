@@ -25,14 +25,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/currentpollstitle"
-                android:text="HOME"/>
+                android:text="logout"
+                android:id="@+id/goHome"/>
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/cardViewview">
+        android:layout_below="@id/cardViewview"
+        android:id="@+id/listView">
     </ListView>
 
 
